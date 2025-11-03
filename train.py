@@ -28,7 +28,8 @@ import segmentation_models_pytorch as smp
 from urllib.request import urlretrieve
 import shutil
 
-DATASET_ZIP_URL = 'https://github.com/pynicolas/fairscan-segmentation-dataset/releases/download/v1.4/fairscan-segmentation-dataset-v1.4.zip'
+DATASET_VERSION = 'v2.0'
+DATASET_ZIP_URL = f'https://github.com/pynicolas/fairscan-dataset/releases/download/{DATASET_VERSION}/fairscan-dataset-{DATASET_VERSION}.zip'
 
 BUILD_DIR = "build"
 MODEL_DIR = BUILD_DIR + "/model"
@@ -36,7 +37,8 @@ MODEL_FILE_PATH = MODEL_DIR + "/fairscan-segmentation-model.pt"
 TFLITE_MODEL_FILE_PATH = MODEL_DIR + "/fairscan-segmentation-model.tflite"
 DATASET_ZIP_PATH = BUILD_DIR + "/dataset.zip"
 DATASET_PARENT_DIR = BUILD_DIR + "/dataset"
-DATASET_DIR = DATASET_PARENT_DIR + "/fairscan-segmentation-dataset"
+DATASET_DIR = DATASET_PARENT_DIR + "/fairscan-dataset"
+NB_EPOCHS = 25
 
 if os.path.isdir(BUILD_DIR):
     shutil.rmtree(BUILD_DIR)
@@ -99,7 +101,7 @@ train_dataset = DocumentSegmentationDataset(
     mask_dir=os.path.join(DATASET_DIR, "train/masks"),
     transform=train_transform
 )
-train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True, drop_last=True)
 
 val_dataset = DocumentSegmentationDataset(
     image_dir=os.path.join(DATASET_DIR, "val/images"),
@@ -139,9 +141,9 @@ def evaluate_encoder(encoder_name, model_save_path, device=torch.device('cpu')):
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
     best_dice = -1
     best_state = None
-    nb_epochs = 25
 
-    for epoch in range(nb_epochs):
+    for epoch in range(NB_EPOCHS):
+        start = time.time()
 
         model.train()
         total_loss = 0
@@ -176,8 +178,10 @@ def evaluate_encoder(encoder_name, model_save_path, device=torch.device('cpu')):
         val_loss /= len(val_loader)
         dice_cont_mean = dice_cont_sum / len(val_loader)
         dice_disc_mean = dice_disc_sum / len(val_loader)
+        end = time.time()
 
-        print(f"- Epoch {epoch + 1}/{nb_epochs}: train_loss={avg_train_loss:.4f} | Val Loss: {val_loss:.4f} | Dice (cont): {dice_cont_mean:.4f} | Dice (disc): {dice_disc_mean:.4f}")
+        print(f"- Epoch {epoch + 1}/{NB_EPOCHS}: train_loss={avg_train_loss:.4f} | Val Loss: {val_loss:.4f}" +
+              f" | Dice (cont): {dice_cont_mean:.4f} | Dice (disc): {dice_disc_mean:.4f} | {end - start:.1f} seconds")
 
         if dice_disc_mean > best_dice:
             best_dice = dice_disc_mean
