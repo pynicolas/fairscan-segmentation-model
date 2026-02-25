@@ -38,7 +38,7 @@ TFLITE_MODEL_FILE_PATH = MODEL_DIR + "/fairscan-segmentation-model.tflite"
 DATASET_ZIP_PATH = BUILD_DIR + "/dataset.zip"
 DATASET_PARENT_DIR = BUILD_DIR + "/dataset"
 DATASET_DIR = DATASET_PARENT_DIR + "/fairscan-dataset"
-NB_EPOCHS = 35
+NB_EPOCHS = 1
 
 if os.path.isdir(BUILD_DIR):
     shutil.rmtree(BUILD_DIR)
