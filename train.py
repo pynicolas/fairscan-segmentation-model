@@ -232,8 +232,8 @@ with open(os.path.join(MODEL_DIR, "metrics.json"), "w") as f:
 
 # Convert to TFLite
 
-import ai_edge_torch
-from ai_edge_torch.generative.quantize import quant_recipes
+import litert_torch
+from litert_torch.generative.quantize import quant_recipes
 
 model = smp.DeepLabV3Plus(
     encoder_name=encoder,
@@ -280,10 +280,10 @@ def representative_dataset():
             yield (img,)
 
 # 3. quant_config
-quant_config = quant_recipes.full_int8_dynamic_recipe()
+quant_config = quant_recipes.full_dynamic_recipe()
 
 # 4. Conversion
-edge_model_quantized = ai_edge_torch.convert(
+edge_model_quantized = litert_torch.convert(
     wrapped_model,
     sample_args=sample_args,
     sample_kwargs=None,
