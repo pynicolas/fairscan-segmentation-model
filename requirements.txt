@@ -1,7 +1,6 @@
-ai-edge-torch-nightly
-tf_nightly
-torchvision
-segmentation-models-pytorch
-albumentations
-opencv-python
-numpy
+litert-torch==0.8.0
+torchvision==0.24.1
+segmentation-models-pytorch==0.5.0
+albumentations==2.0.8
+opencv-python==4.13.0.92
+numpy==2.4.2
