@@ -38,7 +38,7 @@ TFLITE_MODEL_FILE_PATH = MODEL_DIR + "/fairscan-segmentation-model.tflite"
 DATASET_ZIP_PATH = BUILD_DIR + "/dataset.zip"
 DATASET_PARENT_DIR = BUILD_DIR + "/dataset"
 DATASET_DIR = DATASET_PARENT_DIR + "/fairscan-dataset"
-NB_EPOCHS = 1
+NB_EPOCHS = 35
 
 if os.path.isdir(BUILD_DIR):
     shutil.rmtree(BUILD_DIR)
@@ -181,7 +181,8 @@ def evaluate_encoder(encoder_name, model_save_path, device=torch.device('cpu')):
         end = time.time()
 
         print(f"- Epoch {epoch + 1}/{NB_EPOCHS}: train_loss={avg_train_loss:.4f} | Val Loss: {val_loss:.4f}" +
-              f" | Dice (cont): {dice_cont_mean:.4f} | Dice (disc): {dice_disc_mean:.4f} | {end - start:.1f} seconds")
+              f" | Dice (cont): {dice_cont_mean:.4f} | Dice (disc): {dice_disc_mean:.4f} | {end - start:.1f} seconds",
+              flush=True)
 
         if dice_disc_mean > best_dice:
             best_dice = dice_disc_mean
