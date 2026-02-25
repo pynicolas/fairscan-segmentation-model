@@ -28,7 +28,7 @@ import segmentation_models_pytorch as smp
 from urllib.request import urlretrieve
 import shutil
 
-DATASET_VERSION = 'v2.0'
+DATASET_VERSION = 'v2.1'
 DATASET_ZIP_URL = f'https://github.com/pynicolas/fairscan-dataset/releases/download/{DATASET_VERSION}/fairscan-dataset-{DATASET_VERSION}.zip'
 
 BUILD_DIR = "build"
@@ -38,7 +38,7 @@ TFLITE_MODEL_FILE_PATH = MODEL_DIR + "/fairscan-segmentation-model.tflite"
 DATASET_ZIP_PATH = BUILD_DIR + "/dataset.zip"
 DATASET_PARENT_DIR = BUILD_DIR + "/dataset"
 DATASET_DIR = DATASET_PARENT_DIR + "/fairscan-dataset"
-NB_EPOCHS = 25
+NB_EPOCHS = 35
 
 if os.path.isdir(BUILD_DIR):
     shutil.rmtree(BUILD_DIR)
